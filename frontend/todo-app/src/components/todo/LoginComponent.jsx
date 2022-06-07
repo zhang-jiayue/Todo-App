@@ -35,23 +35,53 @@ class LoginComponent extends Component {
     });
   }
 
-  loginClicked(event) {
-    if (this.state.username === 'jiayue' && this.state.password === 'dummy') {
-      AuthenticationService.registerSuccessfulLogin(
-        this.state.username,
-        this.state.password
-      );
-      this.props.navigate(`/welcome/${this.state.username}`);
-      //   this.setState({
-      //     showSuccessMessage: true,
-      //     hasLoginFailed: false,
-      //   });
-    } else {
-      this.setState({
-        showSuccessMessage: false,
-        hasLoginFailed: true,
+  loginClicked() {
+    // if (this.state.username === 'jiayue' && this.state.password === 'dummy') {
+    //   AuthenticationService.registerSuccessfulLogin(
+    //     this.state.username,
+    //     this.state.password
+    //   );
+    //   this.props.navigate(`/welcome/${this.state.username}`);
+    //   //   this.setState({
+    //   //     showSuccessMessage: true,
+    //   //     hasLoginFailed: false,
+    //   //   });
+    // } else {
+    //   this.setState({
+    //     showSuccessMessage: false,
+    //     hasLoginFailed: true,
+    //   });
+    // }
+    // AuthenticationService.executeBasicAuthenticationService(
+    //   this.state.username,
+    //   this.state.password
+    // )
+    //   .then(() => {
+    //     AuthenticationService.registerSuccessfulLogin(
+    //       this.state.username,
+    //       this.state.password
+    //     );
+    //     this.props.navigate(`/welcome/${this.state.username}`);
+    //   })
+    //   .catch(() => {
+    //     this.setState({ showSuccessMessage: false });
+    //     this.setState({ hasLoginFailed: true });
+    //   });
+    AuthenticationService.executeJwtAuthenticationService(
+      this.state.username,
+      this.state.password
+    )
+      .then((response) => {
+        AuthenticationService.registerSuccessfulLoginForJwt(
+          this.state.username,
+          response.data.token
+        );
+        this.props.navigate(`/welcome/${this.state.username}`);
+      })
+      .catch(() => {
+        this.setState({ showSuccessMessage: false });
+        this.setState({ hasLoginFailed: true });
       });
-    }
   }
 
   render() {

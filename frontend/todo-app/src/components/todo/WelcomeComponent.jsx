@@ -26,7 +26,14 @@ class WelcomeComponent extends Component {
   }
   handleError(error) {
     console.log(error.response);
-    console.log(error.response.data.message);
+    let errorMessage = '';
+    if (error.message) {
+      errorMessage += error.message;
+    }
+    if (error.response && error.response.data) {
+      errorMessage += error.response.data.message;
+    }
+    this.setState({ welcomeMessage: errorMessage });
   }
   handleSuccessfulResponse(response) {
     this.setState({ welcomeMessage: response.data.message });
